@@ -6,7 +6,7 @@ namespace AILib;
 /// Tensor wrapper that tracks gradients and computation graph.
 /// </summary>
 /// <typeparam name="T">The numeric type of tensor elements (e.g., float, double).</typeparam>
-public sealed class Tensor<T> : IDisposable where T : unmanaged, INumber<T>
+public sealed partial class Tensor<T> : IDisposable where T : unmanaged, INumber<T>
 {
     /// <summary>
     /// The underlying .NET tensor data.
@@ -46,7 +46,7 @@ public sealed class Tensor<T> : IDisposable where T : unmanaged, INumber<T>
     /// <summary>
     /// Gets or sets the gradient function for backpropagation.
     /// </summary>
-    internal object? GradFn { get; set; }
+    internal Autograd.GradientFunction<T>? GradFn { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the Tensor class.
@@ -92,21 +92,7 @@ public sealed class Tensor<T> : IDisposable where T : unmanaged, INumber<T>
     /// </summary>
     public void Backward()
     {
-        if (!RequiresGrad)
-        {
-            throw new InvalidOperationException("Cannot backward on tensor that doesn't require gradients");
-        }
-
-        if (ElementCount != 1)
-        {
-            throw new InvalidOperationException("Backward can only be called on scalar tensors");
-        }
-
-        // Initialize gradient as 1
-        Grad = Tensor.Ones<T>(Shape);
-
-        // TODO: Implement full backward pass with topological sort
-        // This will be completed in Phase 2
+        Autograd.GradientEngine.Backward(this);
     }
 
     /// <summary>

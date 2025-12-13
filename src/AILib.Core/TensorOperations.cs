@@ -1,4 +1,5 @@
 using System.Numerics;
+using AILib.Autograd.Operations;
 
 namespace AILib;
 
@@ -32,10 +33,8 @@ public static class TensorOperations
         }
 
         var reshaped = System.Numerics.Tensors.Tensor.Reshape(tensor.Data, newShape);
-        return new Tensor<T>(reshaped, tensor.Device, tensor.RequiresGrad)
-        {
-            GradFn = tensor.RequiresGrad ? new object() : null // Placeholder for Phase 2
-        };
+        return new Tensor<T>(reshaped, tensor.Device, tensor.RequiresGrad);
+        // Note: Reshape backward will be implemented later
     }
 
     /// <summary>
@@ -67,10 +66,8 @@ public static class TensorOperations
         }
 
         var transposed = System.Numerics.Tensors.Tensor.Transpose(tensor.Data);
-        return new Tensor<T>(transposed, tensor.Device, tensor.RequiresGrad)
-        {
-            GradFn = tensor.RequiresGrad ? new object() : null // Placeholder for Phase 2
-        };
+        return new Tensor<T>(transposed, tensor.Device, tensor.RequiresGrad);
+        // Note: Transpose backward will be implemented later
     }
 
     /// <summary>
@@ -84,10 +81,8 @@ public static class TensorOperations
         where T : unmanaged, INumber<T>
     {
         var permuted = System.Numerics.Tensors.Tensor.PermuteDimensions(tensor.Data, dimensions);
-        return new Tensor<T>(permuted, tensor.Device, tensor.RequiresGrad)
-        {
-            GradFn = tensor.RequiresGrad ? new object() : null // Placeholder for Phase 2
-        };
+        return new Tensor<T>(permuted, tensor.Device, tensor.RequiresGrad);
+        // Note: Permute backward will be implemented later
     }
 
     /// <summary>
@@ -121,7 +116,10 @@ public static class TensorOperations
         }
 
         var result = Tensor.FromArray([sum], [1], tensor.RequiresGrad);
-        result.GradFn = tensor.RequiresGrad ? new object() : null; // Placeholder for Phase 2
+        if (result.RequiresGrad)
+        {
+            result.GradFn = new SumBackward<T>(tensor);
+        }
         return result;
     }
 
@@ -145,7 +143,10 @@ public static class TensorOperations
         var mean = sum / count;
 
         var result = Tensor.FromArray([mean], [1], tensor.RequiresGrad);
-        result.GradFn = tensor.RequiresGrad ? new object() : null; // Placeholder for Phase 2
+        if (result.RequiresGrad)
+        {
+            result.GradFn = new MeanBackward<T>(tensor);
+        }
         return result;
     }
 
@@ -193,7 +194,10 @@ public static class TensorOperations
         }
 
         var result = new Tensor<T>(resultData, left.Device, left.RequiresGrad || right.RequiresGrad);
-        result.GradFn = result.RequiresGrad ? new object() : null; // Placeholder for Phase 2
+        if (result.RequiresGrad)
+        {
+            result.GradFn = new MatMulBackward<T>(left, right);
+        }
         return result;
     }
 }
