@@ -80,6 +80,7 @@ AILib/
 
 - **[Getting Started](docs/GettingStarted.md)** - Quick introduction and basic usage
 - **[Neural Network Layers](docs/Layers.md)** - Complete guide to layers (Linear, Dropout, LayerNorm, activations)
+- **[Transformers](docs/Transformers.md)** - Embedding, Multi-Head Attention, Transformer Blocks, GPT Decoder
 - **[Optimizers](docs/Optimizers.md)** - Training with SGD, Adam, and AdamW
 - **[Loss Functions](docs/LossFunctions.md)** - MSE, BCE, and CrossEntropy explained
 - **[API Reference](docs/API.md)** - Detailed API documentation
