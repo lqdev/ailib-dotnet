@@ -64,7 +64,38 @@ AILib/
 │   ├── AILib.Core.Tests/    # Core functionality tests
 │   └── AILib.NN.Tests/      # Neural network tests
 ├── examples/                # Example applications
+│   ├── SimpleGradient/      # Basic autograd examples
+│   └── TrainingExample/     # Complete training workflows
 └── docs/                    # Documentation
+    ├── GettingStarted.md    # Introduction and tutorials
+    ├── Layers.md            # Neural network layers guide
+    ├── Optimizers.md        # Optimizer usage guide
+    ├── LossFunctions.md     # Loss functions guide
+    └── API.md               # API reference
+```
+
+## Documentation
+
+### Comprehensive Guides
+
+- **[Getting Started](docs/GettingStarted.md)** - Quick introduction and basic usage
+- **[Neural Network Layers](docs/Layers.md)** - Complete guide to layers (Linear, Dropout, LayerNorm, activations)
+- **[Optimizers](docs/Optimizers.md)** - Training with SGD, Adam, and AdamW
+- **[Loss Functions](docs/LossFunctions.md)** - MSE, BCE, and CrossEntropy explained
+- **[API Reference](docs/API.md)** - Detailed API documentation
+
+### Examples
+
+Run the examples to see AILib in action:
+
+```bash
+# Basic autograd and gradient computation
+cd examples/SimpleGradient/SimpleGradient
+dotnet run
+
+# Complete training examples (regression, classification, multi-layer networks)
+cd examples/TrainingExample
+dotnet run
 ```
 
 ## Requirements
